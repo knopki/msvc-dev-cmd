@@ -82,3 +82,19 @@ jobs:
         run: |
           cl.exe hello.c
           hello.exe
+  dist-check:
+    name: dist check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v5
+      - name: Download Internet
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Build is exactly the same and there are no uncommited changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            exit 1
+          fi
